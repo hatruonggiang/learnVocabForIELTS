@@ -10,11 +10,17 @@ import re
 from nltk.corpus import words as nltk_words
 from nltk.corpus import wordnet as wn
 
+try:
+    nltk.data.find('corpora/stopwords')
+except LookupError:
+    nltk.download('stopwords')
 
-# Đảm bảo NLTK data đã được tải
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('words')
+try:
+    nltk.data.find('corpora/words')
+except LookupError:
+    nltk.download('words')
+
+print("Tải xuống tài nguyên hoàn tất.")
 
 # Cấu hình Tesseract nếu cần (nếu đã thêm vào PATH thì không cần)
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
@@ -31,38 +37,31 @@ def extract_text_from_image_pdf(pdf_path, max_pages=10):
 
 # đã xong - cấm sửa: lọc từ scan nhầm bằng cách check xem xong từ điển tiếng anh có nó k, 
 def clean_and_tokenize(text, vi_dict_path):
-    # Kiểm tra vi_dict_path có phải là đường dẫn tệp hay không
     if not isinstance(vi_dict_path, str):
         raise ValueError(f"Expected string path, got {type(vi_dict_path)}")
-    
-    # Kiểm tra nếu file không tồn tại
+
     if not os.path.exists(vi_dict_path):
         raise FileNotFoundError(f"File not found: {vi_dict_path}")
 
-    vi_dict = load_vi_dict_from_txt(vi_dict_path)  # Nạp từ điển từ tệp
-    english_keys = set(vi_dict.keys())  # Lấy danh sách các từ tiếng Anh từ vi_dict
+    # Load từ điển từ file
+    vi_dict = load_vi_dict_from_txt(vi_dict_path)
+    english_words_in_dict = set(vi_dict.keys())
 
     stop_words = set(stopwords.words('english'))
-    text = text.lower()  # Chuyển văn bản thành chữ thường
+    text = text.lower()
 
-    # Sử dụng regex để lọc từ hợp lệ (chỉ từ chứa chữ cái a-z)
     words = re.findall(r'\b[a-zA-Z]+\b', text)
 
     filtered_words = []
-    word_dict = {}  # Tạo biến lưu trữ từ đã tìm thấy trong từ điển
-    word_lengths = {}  # Lưu trữ độ dài của từ trong word_dict
-
-    word_dict = {}
-
     for word in words:
-        if len(word) > 1 and word not in stop_words:
-            for dict_word in vi_dict:
-                if word == dict_word:  # Chỉ lấy nếu từ khớp hoàn toàn
-                    word_dict[word] = dict_word  # Lưu lại key từ điển
-                    filtered_words.append(word)
-                    break
+        if len(word) > 2 and word not in stop_words:
+            if word in english_words_in_dict and len(word) == len(word.strip()):
+                filtered_words.append(word)
 
-    
+
+    print(f"✅ Từ giữ lại: {filtered_words}")
+
+
     return filtered_words
 
 
@@ -92,7 +91,7 @@ def load_vi_dict_from_txt(file_path: str) -> dict:
             if line.startswith("|"):  # Dòng mới bắt đầu với từ mới
                 if current_word and current_def:
                     # Ghép nghĩa theo định dạng "+) nghĩa" trước khi lưu
-                    meaning_str = "\n+) " + "\n+) ".join(current_def[:5])  # Giới hạn 3 nghĩa
+                    meaning_str = "\n+) " + "\n+) ".join(current_def[:3])  # Giới hạn 3 nghĩa
                     vi_dict[current_word.lower()] = meaning_str.strip()
                 current_word = line[1:].strip()
                 current_def = []
@@ -101,7 +100,7 @@ def load_vi_dict_from_txt(file_path: str) -> dict:
         
         # Đừng quên lưu từ cuối cùng
         if current_word and current_def:
-            meaning_str = "\n+) " + "\n+) ".join(current_def[:5])  # Giới hạn 3 nghĩa
+            meaning_str = "\n+) " + "\n+) ".join(current_def[:3])  # Giới hạn 3 nghĩa
             vi_dict[current_word.lower()] = meaning_str.strip()
     
     return vi_dict
@@ -122,7 +121,8 @@ def get_word_details(words: list, vi_dict: dict = None) -> list:
                 'part_of_speech': '',
                 'examples': '',
                 'phonetic': '',
-                'meaning_vi': vi_dict.get(word.lower(), '') if vi_dict else ''
+                'count': 0,
+                'meaning_vi': vi_dict.get(word.lower(), '') if vi_dict else '',
             })
             continue
 
@@ -136,7 +136,7 @@ def get_word_details(words: list, vi_dict: dict = None) -> list:
             pos_list.add(syn.pos())
             example_sentences.extend(syn.examples())  # ✅ dùng extend thay vì append
 
-        meaning_str = "\n+) " + "\n+) ".join(list(meanings)[:3])
+        meaning_str = "\n+) " + "\n+) ".join(list(meanings)[:1])
         examples_str = "\n+) " + "\n+) ".join(list(example_sentences)[:3])
         pos_str = ", ".join(pos_list)
 
@@ -146,6 +146,7 @@ def get_word_details(words: list, vi_dict: dict = None) -> list:
             'part_of_speech': pos_str,
             'examples': examples_str,
             'phonetic': phonetic,
+            'count': 0,
             'meaning_vi': vi_dict.get(word.lower(), '') if vi_dict else ''
         })
 
@@ -196,24 +197,3 @@ def process_pdf(pdf_path,master_file, output_csv,vi_dict_path):
     save_to_csv(vocab_df, output_csv)
     return vocab_df
     
-
-
-# 🟩 Gọi hàm chính: duyệt folder PDF
-if __name__ == "__main__":
-    input_folder = "data/pdfs"
-    output_folder = "data/outputs"
-    master_file = "data/master.csv"
-    vi_dict_path = "data/pdfs/data.txt"
-
-
-    for filename in os.listdir(input_folder):
-        if filename.lower().endswith(".pdf"):
-            pdf_path = os.path.join(input_folder, filename)
-            base_name = os.path.splitext(filename)[0]
-            output_csv = os.path.join(output_folder, f"{base_name}.csv")
-
-            if not os.path.exists(output_csv):
-                print(f"\n🚀 Đang xử lý: {filename}")
-                process_pdf(pdf_path,master_file, output_csv,vi_dict_path)
-            else:
-                print(f"⏭️ Bỏ qua (đã có CSV): {filename}")

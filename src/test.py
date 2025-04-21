@@ -1,36 +1,35 @@
-from nltk.corpus import wordnet as wn
+def clean_and_tokenize(text, vi_dict_path):
+    # Kiểm tra vi_dict_path có phải là đường dẫn tệp hay không
+    if not isinstance(vi_dict_path, str):
+        raise ValueError(f"Expected string path, got {type(vi_dict_path)}")
+    
+    # Kiểm tra nếu file không tồn tại
+    if not os.path.exists(vi_dict_path):
+        raise FileNotFoundError(f"File not found: {vi_dict_path}")
 
-def get_word_details(word):
-    # Lấy các nghĩa của từ
-    synsets = wn.synsets(word)
-    
-    if not synsets:
-        return "Không tìm thấy thông tin cho từ này."
-    
-    word_details = []
-    
-    for synset in synsets:
-        meaning = synset.definition()  # Nghĩa của từ
-        part_of_speech = synset.pos()  # Từ loại (noun, verb, adj, adv)
-        examples = synset.examples()  # Ví dụ của từ
-        phonetic = synset.lemmas()[0].name()  # Tên chuẩn (dùng trong một số trường hợp)
-        
-        word_details.append({
-            'word': word,
-            'meaning': meaning,
-            'part_of_speech': part_of_speech,
-            'examples': examples,
-            'phonetic': phonetic
-        })
-    
-    return word_details
+    vi_dict = load_vi_dict_from_txt(vi_dict_path)  # Nạp từ điển từ tệp
+    english_keys = set(vi_dict.keys())  # Lấy danh sách các từ tiếng Anh từ vi_dict
 
-# Ví dụ tra cứu từ "environment"
-word_info = get_word_details("environment")
-for info in word_info:
-    print(f"Word: {info['word']}")
-    print(f"Meaning: {info['meaning']}")
-    print(f"Part of Speech: {info['part_of_speech']}")
-    print(f"Examples: {info['examples']}")
-    print(f"Phonetic: {info['phonetic']}")
-    print("------")
+    stop_words = set(stopwords.words('english'))
+    text = text.lower()  # Chuyển văn bản thành chữ thường
+
+    # Sử dụng regex để lọc từ hợp lệ (chỉ từ chứa chữ cái a-z)
+    words = re.findall(r'\b[a-zA-Z]+\b', text)
+
+    filtered_words = []
+    word_dict = {}  # Tạo biến lưu trữ từ đã tìm thấy trong từ điển
+    word_lengths = {}  # Lưu trữ độ dài của từ trong word_dict
+
+    word_dict = {}
+
+    for word in words:
+        if len(word) > 1 and word not in stop_words:
+            for dict_word in vi_dict:
+                if word == dict_word:  # Chỉ lấy nếu từ khớp hoàn toàn
+                    word_dict[word] = dict_word  # Lưu lại key từ điển
+                    filtered_words.append(word)
+                    break
+
+    
+    return filtered_words
+

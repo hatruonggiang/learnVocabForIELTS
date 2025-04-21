@@ -3,64 +3,76 @@ import os
 import shutil
 from PyQt5.QtWidgets import (
     QApplication, QWidget, QPushButton, QVBoxLayout,QHBoxLayout, QLabel,
-    QFileDialog, QTextEdit,QFrame,QTableWidget,QTableWidgetItem,
+    QFileDialog, QTextEdit,QFrame,QTableWidget,QTableWidgetItem,QStackedWidget
 )
 from PyQt5.QtCore import Qt
 import pandas as pd
+from games.flashcard.app import FlashcardApp
 
 class VocabApp(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Vocabulary Extractor")
         self.setGeometry(100, 100, 1000, 400)
-
+        self.label = QLabel(self)  # Khởi tạo thuộc tính label
         self.init_ui()
 
         self.layout = QVBoxLayout()
 
     def init_ui(self):
-            # Layout chính: chia dọc (sidebar trái, content phải)
-            main_layout = QHBoxLayout(self)
+        # Layout chính: chia dọc (sidebar trái, content phải)
+        main_layout = QHBoxLayout(self)
+        main_layout.setContentsMargins(10, 10, 10, 10)  # Thêm margin để không dính vào viền
 
-            # === Sidebar trái ===
-            self.sidebar = QFrame()
-            self.sidebar.setFixedWidth(200)
-            self.sidebar.setStyleSheet("background-color: #f0f0f0;")
-            sidebar_layout = QVBoxLayout(self.sidebar)
+        # === Sidebar trái ===
+        self.sidebar = QFrame()
+        self.sidebar.setFixedWidth(200)
+        self.sidebar.setStyleSheet("background-color: #f0f0f0;")
+        sidebar_layout = QVBoxLayout(self.sidebar)
 
-            # Các nút trên sidebar
-            self.btn_data = QPushButton("📂 Menu Data")
-            self.btn_upload = QPushButton("📤 Upload PDF")
-            self.btn_process = QPushButton("⚙️ Xử lý")
+        # Các nút trên sidebar
+        self.btn_data = QPushButton("📂 Menu Data")
+        self.btn_upload = QPushButton("📤 Upload PDF")
+        self.btn_process = QPushButton("⚙️ Xử lý")
+        self.btn_flashcard = QPushButton("📚 Flashcard")
 
-            # Thêm nút vào layout
-            for btn in [self.btn_data, self.btn_upload, self.btn_process]:
-                btn.setMinimumHeight(40)
-                sidebar_layout.addWidget(btn)
+        # Thêm nút vào layout
+        for btn in [self.btn_data, self.btn_upload, self.btn_process, self.btn_flashcard]:
+            btn.setMinimumHeight(40)
+            sidebar_layout.addWidget(btn)
 
-            sidebar_layout.addStretch()  # Đẩy nút lên đầu
+        sidebar_layout.addStretch()  # Đẩy nút lên đầu
 
-            # === Content chính bên phải ===
-            self.content = QFrame()
-            content_layout = QVBoxLayout(self.content)
+        # === Content chính bên phải ===
+        self.content = QFrame()
+        self.content_layout = QVBoxLayout(self.content)
 
-            self.label = QLabel("Chào mừng đến với ứng dụng lọc từ PDF!")
+        self.label = QLabel("Chào mừng đến với ứng dụng lọc từ PDF!")
 
-            # === QTableWidget để hiển thị kết quả ===
-            self.table_widget = QTableWidget(self)
-            self.table_widget.setColumnCount(4)  # 4 cột: word, meaning, meaning VN, example
-            self.table_widget.setHorizontalHeaderLabels(["Word", "Meaning", "Meaning VN", "Example"])
+        # === QTableWidget để hiển thị kết quả ===
+        self.table_widget = QTableWidget(self)
+        self.table_widget.setColumnCount(4)  # 4 cột: word, meaning, meaning VN, example
+        self.table_widget.setHorizontalHeaderLabels(["Word", "Meaning", "Meaning VN", "Example"])
 
-            content_layout.addWidget(self.label)
-            content_layout.addWidget(self.table_widget)
+        # Cài đặt layout cho content
+        self.content_layout.addWidget(self.label)
+        self.content_layout.addWidget(self.table_widget)
 
-            main_layout.addWidget(self.sidebar)
-            main_layout.addWidget(self.content)
+        # Thêm phần sidebar và content vào layout chính
+        main_layout.addWidget(self.sidebar)
+        main_layout.addWidget(self.content)
 
-            # Kết nối các nút
-            self.btn_upload.clicked.connect(self.choose_file)
-            self.btn_process.clicked.connect(self.process_pdf)
-            self.pdf_path = None
+        # Kết nối các nút
+        self.btn_upload.clicked.connect(self.choose_file)
+        self.btn_process.clicked.connect(self.process_pdf)
+        self.btn_flashcard.clicked.connect(self.show_flashcard)
+
+        self.pdf_path = None
+        self.setLayout(main_layout)
+
+        # Thiết lập kích thước cửa sổ ban đầu
+        self.setWindowTitle("Ứng Dụng Lọc Từ Vựng")
+        self.setGeometry(100, 100, 800, 600)  # Kích thước cửa sổ ban đầu
 
     def choose_file(self):
         file_name, _ = QFileDialog.getOpenFileName(self, "Chọn file PDF", "", "PDF files (*.pdf)")
@@ -117,22 +129,27 @@ class VocabApp(QWidget):
 
 
 
-            if not vocab_list.empty:  # ✅ Đúng cách để kiểm tra DataFrame có dữ liệu không
+            if not vocab_list.empty:
                 self.label.setText("✅ Đã xử lý xong.")
-                # Điền dữ liệu vào bảng
-                for idx, row in vocab_list.iterrows():  # ✅ Duyệt từng dòng trong DataFrame
+                for idx, row in vocab_list.iterrows():
                     row_position = self.table_widget.rowCount()
                     self.table_widget.insertRow(row_position)
 
-                    word_item = QTableWidgetItem(str(row['word']))
-                    meaning_item = QTableWidgetItem(str(row['meaning']))
-                    meaning_vn_item = QTableWidgetItem(str(row['meaning_vi']))
-                    example_item = QTableWidgetItem(str(row['examples']))
+                    def make_item(text):
+                        item = QTableWidgetItem(str(text))
+                        item.setToolTip(str(text))  # Hiện toàn bộ khi hover
+                        item.setTextAlignment(Qt.AlignTop)
+                        item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
+                        return item
 
-                    self.table_widget.setItem(row_position, 0, word_item)
-                    self.table_widget.setItem(row_position, 1, meaning_item)
-                    self.table_widget.setItem(row_position, 2, meaning_vn_item)
-                    self.table_widget.setItem(row_position, 3, example_item)
+                    self.table_widget.setItem(row_position, 0, make_item(row['word']))
+                    self.table_widget.setItem(row_position, 1, make_item(row['meaning']))
+                    self.table_widget.setItem(row_position, 2, make_item(row['meaning_vi']))
+                    self.table_widget.setItem(row_position, 3, make_item(row['examples']))
+
+                # Tự động giãn kích thước phù hợp nội dung
+                # self.table_widget.resizeColumnsToContents()
+                self.table_widget.resizeRowsToContents()
 
             else:
                 self.label.setText("ℹ️ Không có từ vựng mới.")
@@ -142,6 +159,17 @@ class VocabApp(QWidget):
 
         except Exception as e:
             self.label.setText(f"❌ Lỗi: {str(e)}")
+    
+    def show_flashcard(self):
+        # Xóa tất cả widget hiện tại trong content_layout
+        for i in range(self.content_layout.count()):
+            widget = self.content_layout.itemAt(i).widget()
+            if widget:
+                widget.deleteLater()
+
+        # Thêm giao diện Flashcard vào content_layout
+        self.flashcard_app = FlashcardApp(self)
+        self.content_layout.addWidget(self.flashcard_app)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
