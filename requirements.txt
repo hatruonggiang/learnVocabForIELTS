@@ -1,8 +1,9 @@
-pandas
-requests
-beautifulsoup4
+PyMuPDF
+pytesseract
+pdf2image
 nltk
-deep-translator
-PyPDF2
-python-docx
-openpyxl
+pandas
+wordfreq
+eng-to-ipa
+gTTS
+Pillow
