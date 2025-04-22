@@ -7,3 +7,5 @@ wordfreq
 eng-to-ipa
 gTTS
 Pillow
+pyttsx3
+playsound

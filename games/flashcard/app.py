@@ -2,12 +2,12 @@ import sys
 import random
 import pandas as pd
 import os
-from PyQt5.QtCore import QStringListModel
+from PyQt5.QtCore import QStringListModel,QTimer
 from PyQt5.QtWidgets import (
     QWidget, QLabel, QPushButton, QVBoxLayout, QApplication,
     QMessageBox, QComboBox, QHBoxLayout,QListView
 )
-
+from src.utils import TextToSpeechApp  # Nhập hàm xử lý phát âm từ utils.py
 
 
 class FlashcardApp(QWidget):
@@ -18,6 +18,11 @@ class FlashcardApp(QWidget):
         self.current_word = ""
         self.init_ui()
         self.apply_flashcard_style()  # Áp dụng QSS riêng cho Flashcard
+
+         # Thiết lập QTimer cho việc phát âm định kỳ
+        self.speech_timer = QTimer(self)
+        self.speech_timer.setInterval(2000)  # 2 giây
+        self.speech_timer.timeout.connect(self.speak_current_word)
 
     def init_ui(self):
         self.top_labbel = QLabel("📂 Chọn file từ vựng:",self)
@@ -30,6 +35,7 @@ class FlashcardApp(QWidget):
 
         self.meaning_label = QListView(self)
         self.model = QStringListModel()  # Dùng QStringListModel để quản lý danh sách nghĩa
+        self.text_to_speech = TextToSpeechApp()
         self.meaning_label.setModel(self.model)
 
         # Tắt các nút khi chưa có dữ liệu
@@ -37,6 +43,10 @@ class FlashcardApp(QWidget):
             btn.setEnabled(False)
         self.meaning_label.setVisible(False)
 
+
+       
+
+        self.is_speaking = False  # Cờ kiểm tra trạng thái phát âm
         # Load danh sách file từ data/outputs
         self.load_csv_files()
         self.file_combo.currentIndexChanged.connect(self.load_selected_csv)
@@ -110,6 +120,10 @@ class FlashcardApp(QWidget):
         self.model.setStringList([meaning])  # Đưa nghĩa vào danh sách
         self.meaning_label.setVisible(False)  # Ban đầu không hiển thị nghĩa
         self.toggle_button.setText("Hiện nghĩa")
+        
+        self.speak_current_word()
+        self.speech_timer.start()
+
 
 
     def toggle_meaning(self):
@@ -150,6 +164,16 @@ class FlashcardApp(QWidget):
         with open(style_path, "r", encoding="utf-8") as f:
             self.setStyleSheet(f.read())
 
+# phát âm
+    def speak_current_word(self):
+        """Phát âm từ hiện tại trong word_label"""
+        self.is_speaking = True
+        text = self.word_label.text()
+        self.text_to_speech.speak(text, use_online=False)  # Gọi hàm phát âm từ utils.py            self.is_speaking = False
+   
+    def stop_speaking(self):
+        """Dừng việc phát âm"""
+        self.speech_timer.stop()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

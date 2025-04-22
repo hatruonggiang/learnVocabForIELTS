@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtCore import Qt
 import pandas as pd
-
+from src.utils import TextToSpeechApp
 
 class DataManager(QWidget):
     def __init__(self):
@@ -19,7 +19,9 @@ class DataManager(QWidget):
 
         self.pdf_combo = QComboBox()
         self.csv_combo = QComboBox()
-
+        
+        # Tạo đối tượng TextToSpeechApp
+        self.text_to_speech = TextToSpeechApp()
         self.load_pdf_files()
         self.load_csv_files()
 
@@ -47,6 +49,8 @@ class DataManager(QWidget):
         layout.addWidget(self.table_widget)
 
         self.setLayout(layout)
+        # Phát âm khi click vào từ trong bảng
+        self.table_widget.cellClicked.connect(self.on_cell_clicked)
 
     def load_pdf_files(self):
         pdf_files = [f for f in os.listdir(self.pdf_dir) if f.endswith('.pdf')]
@@ -57,6 +61,14 @@ class DataManager(QWidget):
         csv_files = [f for f in os.listdir(self.csv_dir) if f.endswith('.csv')]
         self.csv_combo.clear()
         self.csv_combo.addItems(csv_files)
+
+
+    def on_cell_clicked(self, row, column):
+        """Khi người dùng ấn vào ô trong bảng, phát âm từ trong cột 'Word'"""
+        if column == 0:  # Cột "Word"
+            word = self.table_widget.item(row, column).text()
+            print(word)
+            self.text_to_speech.speak(word, use_online=False)  # Gọi phương thức phát âm
 
     def remove_selected_pdf(self):
         selected_pdf = self.pdf_combo.currentText()
