@@ -100,7 +100,7 @@ def load_vi_dict_from_txt(file_path: str) -> dict:
         
         # Đừng quên lưu từ cuối cùng
         if current_word and current_def:
-            meaning_str = "\n+) " + "\n+) ".join(current_def[:3])  # Giới hạn 3 nghĩa
+            meaning_str = "\n+) " + "\n+) ".join(current_def)  # lưu toàn bộ nghĩa tiếng việt
             vi_dict[current_word.lower()] = meaning_str.strip()
     
     return vi_dict
@@ -176,10 +176,10 @@ def save_to_csv(df, output_path):
 def process_pdf(pdf_path,master_file, output_csv,vi_dict_path):
     vi_dict = load_vi_dict_from_txt(vi_dict_path)
     master_df = initialize_master_file(master_file)
-    text = extract_text_from_image_pdf(pdf_path, 30)
+    text = extract_text_from_image_pdf(pdf_path, 100000)
     words = clean_and_tokenize(text, vi_dict_path)
     vocab_df = analyze_vocab(words)
-    # vocab_df = vocab_df[~vocab_df['word'].isin(master_df['word'])]
+    vocab_df = vocab_df[~vocab_df['word'].isin(master_df['word'])]
     # Áp dụng hàm get_word_details cho cột 'word' của vocab_df
     word_details = get_word_details(vocab_df['word'].tolist(), vi_dict=vi_dict)
 

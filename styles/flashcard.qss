@@ -1,0 +1,114 @@
+/* QSS riêng cho Flashcard App */
+
+QWidget {
+    font-family: "Segoe UI";
+    font-size: 14px;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+/* ComboBox (Chọn file từ vựng) */
+QComboBox {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 14px;
+}
+
+QComboBox:hover {
+    border-color: #4a90e2;
+}
+
+/* Label hiển thị từ và nghĩa */
+QLabel {
+    font-size: 12px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+    border: 2px solid #030c71;
+    border-radius: 10px;
+    background-color: #9398cf;
+    padding: 10px;
+    min-height: 50px;
+    max-height: 50px;
+}
+Qlabel:hover{
+    border: 2px solid #125bae
+}
+
+/* Nút (Button) chung */
+QPushButton {
+    background-color: #034d78;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 16px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    min-width: 120px;
+}
+
+QPushButton:hover {
+    background-color: #207cd8;
+}
+
+QPushButton:pressed {
+    background-color: #2c5f99;
+    padding-left: 12px;
+    padding-top: 12px;
+}
+
+/* Nút "Hiện nghĩa" và "Ẩn nghĩa" */
+QPushButton#toggle_button {
+    background-color: #f7a41f;
+}
+
+QPushButton#toggle_button:hover {
+    background-color: #e68a00;
+}
+
+/* Nút "Nhớ" và "Quên" */
+QPushButton#remember_button {
+    background-color: #28a745;
+}
+
+QPushButton#remember_button:hover {
+    background-color: #218838;
+}
+
+QPushButton#forget_button {
+    background-color: #dc3545;
+}
+
+QPushButton#forget_button:hover {
+    background-color: #c82333;
+}
+
+/* Định dạng cho phần văn bản */
+QLabel {
+    margin: 10px 0;
+}
+
+
+/* Hiệu ứng khi hover qua các thành phần */
+/* QWidget:hover {
+    background-color: #f0f0f0;
+} */
+
+/* Tùy chỉnh cho cửa sổ ứng dụng */
+QWidget {
+    border-radius: 10px;
+}
+
+
+/* QSS để cố định QLabel lên trên cùng */
+QLabel#topLabel {
+    position: absolute;
+    top: 10px;      /* Khoảng cách từ trên */
+    left: 10px;     /* Khoảng cách từ bên trái */
+    right: 10px;    /* Khoảng cách từ bên phải */
+    font-size: 20px;
+    font-weight: bold;
+    color: red;
+}

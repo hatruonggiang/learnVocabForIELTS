@@ -2,10 +2,12 @@ import sys
 import random
 import pandas as pd
 import os
+from PyQt5.QtCore import QStringListModel
 from PyQt5.QtWidgets import (
     QWidget, QLabel, QPushButton, QVBoxLayout, QApplication,
-    QMessageBox, QComboBox, QHBoxLayout
+    QMessageBox, QComboBox, QHBoxLayout,QListView
 )
+
 
 
 class FlashcardApp(QWidget):
@@ -15,15 +17,20 @@ class FlashcardApp(QWidget):
         self.df = None
         self.current_word = ""
         self.init_ui()
+        self.apply_flashcard_style()  # Áp dụng QSS riêng cho Flashcard
 
     def init_ui(self):
+        self.top_labbel = QLabel("📂 Chọn file từ vựng:",self)
         self.word_label = QLabel("", self)
-        self.meaning_label = QLabel("", self)
         self.toggle_button = QPushButton("Hiện nghĩa", self)
         self.next_button = QPushButton("Tiếp", self)
         self.remember_button = QPushButton("✓ Nhớ", self)
         self.forget_button = QPushButton("✗ Quên", self)
         self.file_combo = QComboBox(self)
+
+        self.meaning_label = QListView(self)
+        self.model = QStringListModel()  # Dùng QStringListModel để quản lý danh sách nghĩa
+        self.meaning_label.setModel(self.model)
 
         # Tắt các nút khi chưa có dữ liệu
         for btn in [self.toggle_button, self.next_button, self.remember_button, self.forget_button]:
@@ -40,7 +47,7 @@ class FlashcardApp(QWidget):
 
         # Layout
         layout = QVBoxLayout()
-        layout.addWidget(QLabel("📂 Chọn file từ vựng:", self))
+        layout.addWidget(self.top_labbel)
         layout.addWidget(self.file_combo)
         layout.addWidget(self.word_label)
         layout.addWidget(self.meaning_label)
@@ -96,10 +103,14 @@ class FlashcardApp(QWidget):
         word = selected['word']
         meaning = selected.get('meaning_vi', '(Không có nghĩa)')
 
+        # Hiển thị từ
         self.word_label.setText(f"<h2>{word}</h2>")
-        self.meaning_label.setText(f"<i>{meaning}</i>")
-        self.meaning_label.setVisible(False)
+
+        # Cập nhật nghĩa vào model của QListView
+        self.model.setStringList([meaning])  # Đưa nghĩa vào danh sách
+        self.meaning_label.setVisible(False)  # Ban đầu không hiển thị nghĩa
         self.toggle_button.setText("Hiện nghĩa")
+
 
     def toggle_meaning(self):
         if self.meaning_label.isVisible():
@@ -110,12 +121,15 @@ class FlashcardApp(QWidget):
             word_data = next((item for item in self.vocab_list if item['word'] == self.current_word), {})
             meaning = word_data.get('meaning_vi', '(Không có nghĩa)')
             example = word_data.get('examples', '')
-            text = f"<i>{meaning}</i>"
+            
+            text = [meaning]
             if example:
-                text += f"<br><span style='color:gray'>💬 {example}</span>"
-            self.meaning_label.setText(text)
-            self.meaning_label.setVisible(True)
+                text.append(f"💬 {example}")  # Thêm ví dụ vào danh sách
+
+            self.model.setStringList(text)  # Cập nhật danh sách nghĩa trong model
+            self.meaning_label.setVisible(True)  # Hiển thị nghĩa
             self.toggle_button.setText("Ẩn nghĩa")
+
 
 
     def update_count(self, remembered=True):
@@ -129,6 +143,12 @@ class FlashcardApp(QWidget):
             # Cập nhật vocab_list
             self.vocab_list = self.df.to_dict('records')
         self.show_random_card()
+    
+    def apply_flashcard_style(self):
+        style_path = os.path.join(os.path.dirname(__file__), "../../styles/flashcard.qss")
+
+        with open(style_path, "r", encoding="utf-8") as f:
+            self.setStyleSheet(f.read())
 
 
 if __name__ == "__main__":

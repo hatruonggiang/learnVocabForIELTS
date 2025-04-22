@@ -3,11 +3,13 @@ import os
 import shutil
 from PyQt5.QtWidgets import (
     QApplication, QWidget, QPushButton, QVBoxLayout,QHBoxLayout, QLabel,
-    QFileDialog, QTextEdit,QFrame,QTableWidget,QTableWidgetItem,QStackedWidget
+    QFileDialog, QTextEdit,QFrame,QTableWidget,QTableWidgetItem,QStackedWidget,QStyleFactory
 )
 from PyQt5.QtCore import Qt
 import pandas as pd
 from games.flashcard.app import FlashcardApp
+from games.quiz.app import QuizApp
+from src.data import DataManager
 
 class VocabApp(QWidget):
     def __init__(self):
@@ -27,7 +29,6 @@ class VocabApp(QWidget):
         # === Sidebar trái ===
         self.sidebar = QFrame()
         self.sidebar.setFixedWidth(200)
-        self.sidebar.setStyleSheet("background-color: #f0f0f0;")
         sidebar_layout = QVBoxLayout(self.sidebar)
 
         # Các nút trên sidebar
@@ -35,9 +36,12 @@ class VocabApp(QWidget):
         self.btn_upload = QPushButton("📤 Upload PDF")
         self.btn_process = QPushButton("⚙️ Xử lý")
         self.btn_flashcard = QPushButton("📚 Flashcard")
+        self.btn_quiz = QPushButton("🎮 Quiz")
+
+
 
         # Thêm nút vào layout
-        for btn in [self.btn_data, self.btn_upload, self.btn_process, self.btn_flashcard]:
+        for btn in [self.btn_data, self.btn_upload, self.btn_process, self.btn_flashcard,self.btn_quiz]:
             btn.setMinimumHeight(40)
             sidebar_layout.addWidget(btn)
 
@@ -63,9 +67,11 @@ class VocabApp(QWidget):
         main_layout.addWidget(self.content)
 
         # Kết nối các nút
+        self.btn_data.clicked.connect(self.open_data_manager)
         self.btn_upload.clicked.connect(self.choose_file)
         self.btn_process.clicked.connect(self.process_pdf)
         self.btn_flashcard.clicked.connect(self.show_flashcard)
+        self.btn_quiz.clicked.connect(self.show_quiz)
 
         self.pdf_path = None
         self.setLayout(main_layout)
@@ -73,6 +79,17 @@ class VocabApp(QWidget):
         # Thiết lập kích thước cửa sổ ban đầu
         self.setWindowTitle("Ứng Dụng Lọc Từ Vựng")
         self.setGeometry(100, 100, 800, 600)  # Kích thước cửa sổ ban đầu
+
+    def open_data_manager(self):
+    # Xóa widget cũ trong content layout
+        for i in reversed(range(self.content_layout.count())):
+            widget_to_remove = self.content_layout.itemAt(i).widget()
+            if widget_to_remove:
+                widget_to_remove.setParent(None)
+
+        # Tạo DataManager và chèn vào layout
+        self.data_manager = DataManager()
+        self.content_layout.addWidget(self.data_manager)
 
     def choose_file(self):
         file_name, _ = QFileDialog.getOpenFileName(self, "Chọn file PDF", "", "PDF files (*.pdf)")
@@ -127,8 +144,6 @@ class VocabApp(QWidget):
             else:
                 print(f"Dữ liệu có {len(vocab_list)} từ vựng.")
 
-
-
             if not vocab_list.empty:
                 self.label.setText("✅ Đã xử lý xong.")
                 for idx, row in vocab_list.iterrows():
@@ -171,8 +186,26 @@ class VocabApp(QWidget):
         self.flashcard_app = FlashcardApp(self)
         self.content_layout.addWidget(self.flashcard_app)
 
+    def show_quiz(self):
+        # Xóa tất cả widget hiện tại trong content_layout
+        for i in range(self.content_layout.count()):
+            widget = self.content_layout.itemAt(i).widget()
+            if widget:
+                widget.deleteLater()
+
+        # Thêm giao diện Flashcard vào content_layout
+        vocab_csv = "data/outputs/sample.csv"  # hoặc file cụ thể bạn muốn chơi
+        self.quiz_app = QuizApp(vocab_csv)
+        self.quiz_app.show()
+        self.content_layout.addWidget(self.quiz_app)
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+
+    app.setStyle(QStyleFactory.create("Fusion"))
+    style_path = os.path.join(os.path.dirname(__file__), "styles", "main.qss")
+    with open(style_path, "r", encoding ="utf-8") as f:
+        app.setStyleSheet(f.read())
     window = VocabApp()
     window.show()
     sys.exit(app.exec_())
