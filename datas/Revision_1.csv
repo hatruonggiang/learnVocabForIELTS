@@ -1,0 +1,289 @@
+word,meaning,part_of_speech,examples,phonetic,count,meaning_vi
+the,,,,,0,"+) cái, con, người...
++) ấy, này (người, cái, con...)
++) duy nhất (người, vật...)"
+with,,,,,0,"+) với, cùng, cùng với
++) có
++) ở, ở ni"
+and,,,,,0,"+) và, cùng, với
++) nếu dường như, tuồng như là
++) còn"
+which,,,,,0,"+) nào (ngụ ý chọn lựa)
++) bất cứ... nào
++) ấy, đó"
+for,,,,,0,"+) thay cho, thế cho, đại diện cho
++) ủng hộ, về phe, về phía
++) để, với mục đích là"
+that,,,,,0,"+) ấy, đó, kia
++) người ấy, vật ấy, cái ấy, điều ấy; người đó, vật đó, cái đó, điều đó
++) cái kia, người kia"
+this,,,,,0,"+) này
++) cái này, điều này, việc này
++) thế này"
+each,"
++) (used of count nouns) every one considered individually","s, r","
++) each person is mortal
++) each party is welcome
++) they received $10 each",each,0,"+) mỗi
++) mỗi người, mỗi vật, mỗi cái
++) tất cả mọi người, ai ai"
+your,,,,,0,"+) của anh, của chị, của ngài, của mày; của các anh, của các chị, của các ngài, của chúng mày"
+are,"
++) a unit of surface area equal to 100 square meters","n, v","
++) John is rich
++) This is not a good answer
++) The president of the company is John Smith",are,0,"+) A (đơn vị diện tích ruộng đất, bằng 100m2)
++) cung
++) a. of cyloid cung xicloit"
+alphabet,"
++) a character set that includes letters and is used to write a language",n,"
++) he mastered only the rudiments of geometry",alphabet,0,"+) bảng chữ cái, hệ thống chữ cái
++) (nghĩa bóng) điều cơ bản, bước đầu
++) (Tech) bộ chữ cái, bộ mẫu tự, bảng chữ; bộ ký tự"
+random,"
++) lacking any definite plan or order or purpose; governed by or depending on chance",a,"
++) a random choice
++) bombs fell at random
++) random movements",random,0,"+) at random càn, bậy bạ; ẩu, bừa bâi; to speak at random nói bậy bạ; to shoot at random bắn càn, bắn bừa bãi
++) ẩu, bừa
++) ngẫu nhiên at r. một cách ngẫu nhiên"
+binary,"
++) a system of two stars that revolve around each other under their mutual gravitation","n, a, s","
++) the same source code can be compiled to produce different binaries for different operating systems
++) a binary digit
++) a binary star is a system in which two stars revolve around each other",binary_star,0,"+) đôi, nhị nguyên, nhị phân
++) (Tech) đôi; thuộc nhị phân, cơ hai; thuộc nhị nguyên [TQ], thuộc nhị hạng [NB]; lưỡng thể
++) nhị nguyên, hai ngôi"
+gambler,"
++) a person who wagers money on the outcome of games or sporting events",n,"
++) ",gambler,0,"+) người đánh bạc, con bạc
++) kẻ đầu cơ; kẻ làm liều, mưu đồ ăn to
++) (lý thuyết trò chơi) người đánh bạc"
+has,"
++) (astronomy) the angular distance of a celestial point measured westward along the celestial equator from the zenith crossing; the right ascension for an observer at a particular location and time of day","n, v","
++) She has $1,000 in the bank
++) He has got two beautiful daughters
++) She holds a Master's degree from Harvard",hour_angle,0,"+) có
++) (+ from) nhận được, biết được
++) ăn; uống; hút"
+formula,"
++) a group of symbols that make a mathematical statement",n,"
++) the convention of not naming the main character
++) violence is the rule not the exception
++) his formula for impressing visitors",formula,0,"+) thể thức, cách thức
++) công thức
++) (Tech) công thức (chế tạo); phương pháp; giải pháp"
+distribution,"
++) (statistics) an arrangement of values of a variable showing their observed or theoretical frequency of occurrence",n,"
++) worldwide in distribution
++) the distribution of nerve fibers
++) in complementary distribution",distribution,0,"+) sự phân bổ, sự phân phối, sự phân phát
++) sự rắc, sự rải
++) sự sắp xếp, sự xếp loại, sự phân loại"
+conditional,"
++) qualified by reservations","a, s","
++) conditional acceptance of the terms
++) lent conditional support
++) the conditional sale will not be complete until the full purchase price is paid",conditional,0,"+) ước định, quy định
++) tuỳ thuộc vào, quyết định bởi
++) là điều kiện của, cần thiết cho"
+entropy,"
++) (communication theory) a numerical measure of the uncertainty of an outcome",n,"
++) the signal contained thousands of bits of information
++) entropy increases as matter and energy in the universe degrade to an ultimate state of inert uniformity",information,0,"+) (vật lý) entrôpi
++) (Tech) entropy (ăngtrôpi)
++) entrôpi"
+variable,"
++) something that is likely to vary; something that is subject to variation","n, a, s","
++) the weather is one variable to be considered
++) rainfall in the tropics is notoriously variable
++) variable winds",variable,0,"+) có thể thay đổi
++) hay thay đổi; thay đổi, biến thiên
++) (từ Mỹ,nghĩa Mỹ),  (địa lý,địa chất) variable zone ôn đới"
+four,"
++) the cardinal number that is the sum of three and one","n, s","
++) ",four,0,"+) bốn
++) số bốn
++) bộ bốn (người, vật...)"
+you,,,,,0,"+) anh, chị, ông, bà, ngài, ngươi, mày; các anh, các chị, các ông, các bà, các ngài, các người, chúng mày
++) ai, người ta"
+into,,,,,0,"+) vào, vào trong
++) thành, thành ra; hoá ra
++) (toán học),  (từ hiếm,nghĩa hiếm) với (nhân, chia)"
+where,,,,,0,"+) đâu, ở đâu, ở ni nào, ở chỗ nào, ở phía nào, ở mặt nào
++) như thế nào, ra làm sao
++) đâu, từ đâu; ở đâu"
+joint,"
++) (anatomy) the point of connection between two bones or elements of a skeleton (especially if it allows motion)","n, v, a, s","
++) The boards fit neatly
++) the carpenter jointed two pieces of wood
++) a joint session of Congress",joint,0,"+) chỗ nối, mối nối, đầu nối
++) (giải phẫu) khớp (xương)
++) (thực vật học) mấu, đốt"
+probability,"
++) a measure of how likely it is that some event will occur; a number expressing the ratio of favorable cases to the whole number of cases possible",n,"
++) the probability that an unbiased coin will fall with the head up is 0.5
++) for a while mutiny seemed a probability
++) going by past experience there was a high probability that the visitors were lost",probability,0,"+) sự có thể có, sự chắc hẳn, sự có khả năng xảy ra; sự có lẽ đúng, sự có lẽ thật
++) điều có thể xảy ra, điều chắc hẳn
++) (toán học) xác suất"
+inequality,"
++) lack of equality",n,"
++) the growing inequality between rich and poor",inequality,0,"+) sự không bằng nhau; sự không bình đẳng
++) tính không đều
++) sự khác nhau"
+discrete,"
++) constituting a separate entity or part",s,"
++) a government with three discrete divisions
++) on two distinct occasions",discrete,0,"+) riêng biệt, riêng rẽ, rời rạc
++) (triết học) trừu tượng
++) rời rạc"
+respectively,"
++) in the order given",r,"
++) the brothers were called Felix and Max, respectively",respectively,0,"+) riêng từng người, riêng từng cái; tương ứng (với vị trí, thứ tự, địa vị)"
+uniquely,"
++) so as to be unique",r,"
++) he could determine uniquely the properties of the compound",uniquely,0,"+) đơn nhất; độc nhất vô nhị, chỉ có một
++) duy nhất, vô song (không có cái gì giống hoặc bằng)
++) chỉ liên quan đến một người (một nhóm, một vật)"
+prefix,"
++) an affix that is added in front of the word","n, v","
++) prefixed words",prefix,0,"+) (ngôn ngữ học) tiền tố
++) từ chỉ tước, từ chỉ chức tước, từ chỉ danh hiệu (để trước một danh từ riêng, ví dụ Dr,  Sir)
++) đặt ở hàng trước, thêm vào đầu (coi như lời mở đầu...)"
+kraft,"
++) strong wrapping paper made from pulp processed with a sulfur solution",n,"
++) ",kraft,0,+) giấy gói hàng loại dày ((cũng) kraft paper)
+why,"
++) the cause or intention underlying an action or situation, especially in the phrase `the whys and wherefores'",n,"
++) ",why,0,"+) tại sao, vì sao
++) lý do, lý do tại sao
++) sao!, thế nào!"
+compatible,"
++) able to exist and perform in harmonious or agreeable combination","a, s","
++) a compatible married couple
++) her deeds were compatible with her ideology",compatible,0,"+) (+ with) hợp, thích hợp, tương hợp
++) (Tech) tương thích, tương hợp
++) tương thích"
+terms,"
++) status with respect to the relations between people or groups","n, v","
++) on good terms with her in-laws
++) on a friendly footing
++) the price of gasoline",footing,0,"+) điều khoản, điều kiện đề nghị, điều kiện được chấp nhận
++) giá; điều kiện (cách thanh toán đề nghị hoặc đòi hỏi)
++) quan hệ, sự giao thiệp, sự giao hảo, sự đi lại"
+known,"
++) be cognizant or aware of a fact or a specific piece of information; possess knowledge or information about","v, a","
++) I know that the President lied to the people
++) I want to know who is winning the game!
++) I know it's time",know,0,"+) biết; hiểu biết
++) biết, nhận biết; phân biệt được
++) biết, quen biết"
+occurrence,"
++) an event that happens",n,"
++) a disease of frequent occurrence
++) the occurrence (or presence) of life on other planets",happening,0,"+) sự kiện, sự cố, chuyện xảy ra
++) an everyday occurrence
++) chuyện xảy ra hằng ngày"
+fraction,"
++) a component of a mixture that has been separated by a fractional process","n, v","
++) Can you divide 49 by seven?",fraction,0,"+) (toán học) phân số
++) phần nhỏ, miếng nhỏ
++) (tôn giáo) sự chia bánh thánh"
+down,"
++) soft fine feathers","a, r, v, n, s","
++) you have four downs to gain ten yards
++) He downed three martinis before dinner
++) She killed a bottle of brandy that night",down,0,"+) xuống
++) xuống, bỏ xuống, lặn xuống, ngã xuống, nằm xuống; ở dưới
++) xuống cho đến, cho đến tận, xuôi theo"
+repeatedly,"
++) several time",r,"
++) it must be washed repeatedly",repeatedly,0,+) lặp đi lặp lại nhiều lần
+decimal,"
++) a proper fraction whose denominator is a power of 10","n, s","
++) the decimal system",decimal_fraction,0,"+) (toán học) thập phân
++) (toán học) phân số thập phân
++) (Tech) thập phân"
+what,,,,,0,"+) gì, thế nào
++) sao, vậy thì sao
++) có tin tức gì về... không?"
+optimal,"
++) most desirable possible under a restriction expressed or implied",s,"
++) an optimum return on capital
++) optimal concentration of a drug",optimum,0,"+) tốt nhất
++) tối ưu"
+winning,"
++) succeeding with great difficulty","n, v, s","
++) winning is not everything
++) He won the Gold Medal in skating
++) Our home team won",winning,0,"+) sự thắng cuộc, sự thắng; sự chiến thắng
++) (số nhiều) tiền (đồ vật) được cuộc, tiền được bạc
++) (kỹ thuật) sự khai thác"
+how,,,,,0,"+) thế nào, như thế nào; sao, ra sao, làm sao
++) bao nhiêu; giá bao nhiêu
++) làm sao, biết bao, xiếc bao, biết bao nhiêu, sao mà... đến thế"
+have,"
++) a person who possesses great material wealth","n, v","
++) She has $1,000 in the bank
++) He has got two beautiful daughters
++) She holds a Master's degree from Harvard",rich_person,0,"+) có
++) (+ from) nhận được, biết được
++) ăn; uống; hút"
+after,"
++) located farther aft","s, r","
++) he apologized subsequently
++) he's going to the store but he'll be back here later
++) it didn't happen until afterward",after,0,"+) sau, đằng sau
++) sau, sau khi
++) ở đằng sau, phía sau, đứng sau, liền sau"
+maximize,"
++) make as big or large as possible",v,"
++) Maximize your profits!
++) He maximized his role",maximize,0,"+) làm tăng lên đến tột độ
++) làm cực đại"
+observe,"
++) discover or determine the existence, presence, or fact of",v,"
++) She detected high levels of lead in her drinking water
++) We found traces of lead in the paint
++) She observed that his presentation took up too much time",detect,0,"+) quan sát, nhận xét, theo dõi
++) tiến hành, cử hành, làm (lễ kỷ niệm...)
++) tuân theo, chú ý giữ, tôn trọng"
+instantaneous,"
++) occurring with no delay",s,"
++) relief was instantaneous
++) instant gratification",instantaneous,0,"+) xảy ra ngay lập tức, tức thời, được làm ngay
++) có ở một lúc nào đó, thuộc một lúc nào đó
++) (vật lý) tức thời"
+there,"
++) a location other than here; that place","n, r","
++) you can take it from there
++) they have lived there for years
++) it's not there",there,0,"+) ở đó, tại đó, chỗ đó, chỗ ấy, đấy
++) ((thường) + to be) (dùng để nhấn mạnh, không dịch)
++) đó, đấy"
+arbitrarily,"
++) in a random manner",r,"
++) the houses were randomly scattered
++) bullets were fired into the crowd at random",randomly,0,"+) chuyên quyền, độc đoán
++) tuỳ ý, tự ý
++) một cách tuỳ ý"
+can,"
++) airtight sealed metal container for food or drink or paint etc.","n, v","
++) he deserves a good kick in the butt
++) are you going to sit on your fanny and do nothing?
++) tinned foods are not very tasty",can,0,"+) bình, bi đông, ca (đựng nước)
++) vỏ đồ hộp, hộp đồ hộp
++) (từ Mỹ,nghĩa Mỹ) ghế đẩu, ghế ngồi ở nhà tiêu"
+not,"
++) negation of a word or group of words",r,"
++) he does not speak French
++) she is not going
++) they are not friends",not,0,"+) không
++) hẳn là, chắc là
++) (xem) but"
+decoded,"
++) convert code into ordinary language",v,"
++) ",decode,0,"+) đã đọc được mật mã, được giải mãdecode /'di:'koud/
++) đọc (mật mã), giải (mã)
++) (Tech) giải mã"

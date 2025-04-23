@@ -1,0 +1,133 @@
+word,meaning,part_of_speech,examples,phonetic,count,meaning_vi
+layer,"
++) single thickness of usually some homogeneous substance","v, n","
++) slices of hard-boiled egg on a bed of spinach
++) a good actor communicates on several levels
++) a simile has at least two layers of meaning",layer,1,"+) người đặt, người gài (bẫy)
++) lớp
++) (địa lý,ddịa chất) tầng đất, địa tầng"
+input,"
++) signal going into an electronic system","v, n","
++) from time to time she contributed a personal comment on his account",input_signal,0,"+) cái cho vào
++) lực truyền vào (máy...); dòng điện truyền vào (máy...)
++) (kỹ thuật) tài liệu viết bằng ký hiệu (cung cấp vào máy tính điện tử); sự cung cấp tài liệu (cho máy tính điện tử)"
+hidden,"
++) prevent from being seen or discovered","v, s","
++) Muslim women hide their faces
++) hide the money
++) Probably his horse would be close to where he was hiding",hide,0,"+) da sống (chưa thuộc, mới chỉ cạo và rửa)
++) (đùa cợt) da người
++) không có bất cứ một dấu vết gì"
+given,"
++) an assumption that is taken for granted","v, s, n","
++) She gave him a black eye
++) The draft gave me a cold
++) He gave me a lot of trouble",given,0,"+) đề ngày (tài liệu, văn kiện)
++) nếu
++) đã quy định; (toán học) đã cho"
+activation,"
++) stimulation of activity in an organism or chemical",n,"
++) ",activation,0,"+) sự hoạt hoá
++) sự làm phóng xạ
++) (Tech) hoạt hóa; khởi động, phát động"
+matrix,"
++) (mathematics) a rectangular array of quantities or expressions set out by rows and columns; treated as a single element and manipulated according to rules",n,"
++) ",matrix,0,"+) (giải phẫu) tử cung, dạ con
++) (kỹ thuật) khuôn cối, khuôn dưới
++) (toán học) ma trận"
+desired,"
++) feel or have a desire for; want strongly","v, s","
++) I want to go home now
++) I want my own room
++) I trust you will behave better from now on",desire,0,"+) muốn có đòi hỏidesire /di'zaiə/
++) sự thèm muốn; sự mong muốn, sự ao ước, sự khát khao, sự mơ ước, lòng thèm muốn, lòng khát khao
++) vật mong muốn, vật ao ước"
+wit,"
++) a message whose ingenuity or verbal skill or incongruity has the power to evoke laughter",n,"
++) he's got plenty of brains but no common sense",wit,0,"+) trí, trí thông minh, trí sáng suốt, trí tuệ, trí khôn
++) (số nhiều) mưu kế
++) sự hóm hỉnh, sự dí dỏm"
+output,"
++) final product; the things produced","v, n","
++) production was up in the second quarter
++) the computer is outputting the data from the job I'm running",end_product,1,"+) sự sản xuất
++) sản phẩm
++) khả năng sản xuất, sảm lượng"
+classification,"
++) the act of distributing things into classes or categories of the same type",n,"
++) ",categorization,0,"+) sự phân loại
++) (Tech) phân loại, phân hạng, xếp hạng, phép phân loại
++) (thống kê) sự phân loại, sự phân lớp, sự phân hạng"
+data,"
++) a collection of facts from which conclusions may be drawn",n,"
++) statistical data",data,0,"+) số nhiều của datum
++) ((thường) dùng như số ít) số liệu, dữ kiện; tài liệu, cứ liệu (cung cấp những điều cần thiết)
++) (Tech) dữ kiện, dữ liệu, số liệu"
+behavior,"
++) manner of acting or controlling yourself",n,"
++) the behavior of small particles can be studied in experiments",behavior,0,"+) (Tech) cách xử lý, chế độ; hành vi, trạng thái"
+corresponding,"
++) be compatible, similar or consistent; coincide in their characteristics","v, s","
++) The two stories don't agree in many details
++) The handwriting checks with the signature on the check
++) The suspect's fingerprints don't match those on the gun",match,0,"+) tương ứng; đúng với
++) trao đổi thư từ, thông tin
++) (toán học) góc đồng vịcorrespond /,kɔris'pɔnd/"
+collaboration,"
++) act of working jointly",n,"
++) they worked either in collaboration or independently",collaboration,0,"+) sự cộng tác
++) sự cộng tác với địch"
+independently,"
++) on your own; without outside help",r,"
++) the children worked on the project independently
++) the clothes were hung severally",independently,0,"+) độc lập
++) (+ of) không lệ thuộc, không phụ thuộc, không tuỳ thuộc"
+standing,"
++) social or financial or professional status or reputation","v, s, a, n","
++) of equal standing
++) a member in good standing
++) We had to stand for the entire performance!",standing,0,"+) sự đứng; thế đứng
++) sự đỗ (xe)
++) địa vị"
+web,"
++) an intricate network suggesting something that was formed by weaving or interweaving","v, n","
++) the trees cast a delicate web of shadows over the lawn
++) he owned a network of shops
++) retirement meant dropping out of a whole network of people who had been part of my life",web,0,"+) vi dệt; tấm vi
++) súc giấy, cuộn giấy lớn
++) (động vật học) mạng"
+existing,"
++) have an existence, be extant","v, s, a","
++) Is there a God?
++) he could barely exist on such a low wage
++) Can you live on $2000 a month in New York City?",exist,0,"+) hiện tại; hiện tồn; hiện hành; hiện nay
++) tồn tại, sống
++) hiện có"
+guidance,"
++) something that provides direction or advice as to a decision or course of action",n,"
++) a new council was installed under the direction of the king",guidance,0,"+) sự chỉ đạo, sự hướng dẫn; sự dìu dắt
++) (điều khiển học) điều khiển (từ xa)"
+noted,"
++) make mention of","v, s","
++) She observed that his presentation took up too much time
++) They noted that it was a fine day to go sailing
++) She noted that someone was following her",note,0,"+) nổi tiếng, có danh tiếng
++) lời ghi, lời ghi chép
++) lời ghi chú, lời chú giải"
+fully,"
++) to the greatest degree or extent; completely or entirely; (`full' in this sense is used as a combining form)",r,"
++) fully grown
++) he didn't fully understand
++) knew full well",fully,0,"+) đầy đủ, hoàn toàn
++) hoàn toàn, đầy đủ"
+comprehend,"
++) get the meaning of something",v,"
++) Do you comprehend the meaning of this letter?
++) I could perceive the ship coming over the horizon
++) This group encompasses a wide range of people from different backgrounds",grok,0,"+) hiểu, lĩnh hội, nhận thức thấu đáo
++) bao gồm, bao hàm"
+compute,"
++) make a mathematical calculation or computation",v,"
++) ",calculate,0,"+) tính toán, ước tính
++) (Tech) tính toán (đ)
++) tính toán"

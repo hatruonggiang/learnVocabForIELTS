@@ -7,9 +7,12 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 import pandas as pd
-from games.flashcard.app import FlashcardApp
-from games.quiz.app import QuizApp
+from src.flashcard import FlashcardApp
+# from games.quiz.app import QuizApp
 from src.data import DataManager
+from src.make_word_form_pdf import ProcessApp
+from PyQt6.QtCore import QThread
+from src.worker import GenericWorker
 
 class VocabApp(QWidget):
     def __init__(self):
@@ -80,6 +83,13 @@ class VocabApp(QWidget):
         # Thiết lập kích thước cửa sổ ban đầu
         self.setWindowTitle("Ứng Dụng Lọc Từ Vựng")
         self.setGeometry(100, 100, 1000, 600)  # Kích thước cửa sổ ban đầu
+    
+    def resource_path(relative_path):
+        """ Trả về đường dẫn đúng trong chế độ chạy .exe hoặc khi debug """
+        if hasattr(sys, '_MEIPASS'):
+            return os.path.join(sys._MEIPASS, relative_path)
+        return os.path.join(os.path.abspath("."), relative_path)
+
     def clear_content_layout(self):
         while self.content_layout.count():
             item = self.content_layout.takeAt(0)
@@ -125,11 +135,7 @@ class VocabApp(QWidget):
         self.current_widget = self.table_widget  # Gán cho tiện dọn nếu cần
 
     def open_data_manager(self):
-    # # Xóa widget cũ trong content layout
-    #     for i in reversed(range(self.content_layout.count())):
-    #         widget_to_remove = self.content_layout.itemAt(i).widget()
-    #         if widget_to_remove:
-    #             widget_to_remove.setParent(None)
+
 
         # Tạo DataManager và chèn vào layout
         self.clear_content_layout()
@@ -143,44 +149,12 @@ class VocabApp(QWidget):
             self.label.setText(f"Đã chọn file: {file_name}")
 
     def process_pdf(self):
-        self.label.setText("Đang xử lý, vui lòng chờ...")
+        self.clear_content_layout()
+        self.process_app = ProcessApp(self)
+        self.content_layout.addWidget(self.process_app)
 
-        try:
-            from src.make_word_from_pdf import process_pdf,load_vi_dict_from_txt  # Đảm bảo tên hàm này đúng với file bạn có
-            output_folder = "data/outputs"
-            master_file = "data/outputs/master.csv"
-
-            os.makedirs(output_folder, exist_ok=True)  # Đảm bảo thư mục tồn tại
-
-            if not self.pdf_path:
-                self.label.setText("❗ Vui lòng chọn một file PDF trước.")
-                return
-
-            from src.make_word_from_pdf import process_pdf, load_vi_dict_from_txt
-
-            output_folder = "data/outputs"
-            master_file = "data/outputs/master.csv"
-            os.makedirs(output_folder, exist_ok=True)
-
-            base_name = os.path.splitext(os.path.basename(self.pdf_path))[0]
-            output_csv = os.path.join(output_folder, f"{base_name}.csv")
-            vi_dict_path = "data/pdfs/data.txt"  # giữ nguyên nếu bạn vẫn dùng file này ở đó
-
-            if not os.path.exists(output_csv):
-                print(f"\n🚀 Đang xử lý: {self.pdf_path}")
-                vocab_list = process_pdf(self.pdf_path, master_file, output_csv, vi_dict_path)
-            else:
-                print(f"⏭️ Bỏ qua (đã có CSV): {output_csv}")
-
-        except Exception as e:
-            self.label.setText(f"❌ Lỗi: {str(e)}")
     
     def show_flashcard(self):
-        # # Xóa tất cả widget hiện tại trong content_layout
-        # for i in range(self.content_layout.count()):
-        #     widget = self.content_layout.itemAt(i).widget()
-        #     if widget:
-        #         widget.deleteLater()
 
         # # Thêm giao diện Flashcard vào content_layout
         self.clear_content_layout()
@@ -188,15 +162,10 @@ class VocabApp(QWidget):
         self.content_layout.addWidget(self.flashcard_app)
 
     def show_quiz(self):
-        # # Xóa tất cả widget hiện tại trong content_layout
-        # for i in range(self.content_layout.count()):
-        #     widget = self.content_layout.itemAt(i).widget()
-        #     if widget:
-        #         widget.deleteLater()
 
         # # Thêm giao diện Flashcard vào content_layout
-        vocab_csv = "data/outputs/sample.csv"  # hoặc file cụ thể bạn muốn chơi
-        self.quiz_app = QuizApp(vocab_csv)
+        vocab_csv = "datas/outputs/sample.csv"  # hoặc file cụ thể bạn muốn chơi
+        # self.quiz_app = QuizApp(vocab_csv)
         self.quiz_app.show()
         self.content_layout.addWidget(self.quiz_app)
 
@@ -205,19 +174,34 @@ class VocabApp(QWidget):
         if hasattr(sys, '_MEIPASS'):
             return os.path.join(sys._MEIPASS, relative_path)
         return os.path.join(os.path.abspath("."), relative_path)
+    
+    def run_with_progress(self, func, *args, **kwargs):
+        self.thread = QThread()
+        self.worker = GenericWorker(func, *args, **kwargs)
+        self.worker.moveToThread(self.thread)
 
+        self.thread.started.connect(self.worker.run)
+        self.worker.progress.connect(self.top_label.setText)
+        self.worker.finished.connect(self.handle_step_done)
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+
+        self.thread.start()
+
+    def handle_step_done(self, result):
+        self.top_label.setText("✅ Done!")
+        print("✔️ Result:", result)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     
     app.setStyle(QStyleFactory.create("Fusion"))
     abc = "styles/main.qss"
-    if hasattr(sys, '_MEIPASS'):
-        qss_path = os.path.join(sys._MEIPASS, abc)
-    else: qss_path = os.path.join(os.path.abspath("."), abc)
-    with open(qss_path, "r") as f:
-        app.setStyleSheet(f.read())
-    style_path = os.path.join(os.path.dirname(__file__), 'styles', 'main.qss')
+    basedir = os.path.abspath(os.path.join(os.path.dirname(__file__)))
+    styles_folder = os.path.join(basedir, 'styles')
+
+    qss_path = os.path.join(styles_folder, 'main.qss')
 
     with open(qss_path, "r", encoding ="utf-8") as f:
         app.setStyleSheet(f.read())

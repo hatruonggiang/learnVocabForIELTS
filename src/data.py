@@ -1,34 +1,43 @@
+import sys
 import os
-import csv
+import pandas as pd
 from PyQt6.QtWidgets import (
     QWidget, QLabel, QVBoxLayout, QPushButton, QComboBox, QTableWidget,
-    QTableWidgetItem, QHBoxLayout, QMessageBox
+    QTableWidgetItem, QHBoxLayout, QMessageBox, QHeaderView, QSizePolicy
 )
 from PyQt6.QtCore import Qt
-import pandas as pd
 from src.utils import TextToSpeechApp
-from PyQt6.QtWidgets import QHeaderView,QSizePolicy
+
+def resource_path(relative_path):
+    """Trả về đường dẫn chính xác cho các tài nguyên, xử lý trường hợp ứng dụng chạy dưới dạng .exe"""
+    try:
+        if hasattr(sys, '_MEIPASS'):
+            # Đường dẫn khi ứng dụng đã được đóng gói thành .exe
+            return os.path.join(sys._MEIPASS, relative_path)
+        else:
+            # Đường dẫn trong môi trường phát triển
+            return os.path.join(os.getcwd(), relative_path)
+    except Exception as e:
+        print(f"Error resolving resource path: {e}")
+        return None
 
 class DataManager(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.pdf_dir = 'data/pdfs'
-        self.csv_dir = 'data/outputs'
+        # Sử dụng resource_path để lấy đường dẫn chính xác đến thư mục 'datas'
+        self.csv_dir = resource_path('datas')
+
+        if not self.csv_dir or not os.path.exists(self.csv_dir):
+            QMessageBox.critical(self, "Lỗi", "Không tìm thấy thư mục 'datas'.")
+            return
 
         layout = QVBoxLayout()
-
-        self.pdf_combo = QComboBox()
         self.csv_combo = QComboBox()
-        
+
         # Tạo đối tượng TextToSpeechApp
         self.text_to_speech = TextToSpeechApp()
-        self.load_pdf_files()
         self.load_csv_files()
-
-        # Nút xoá file PDF đã chọn
-        self.remove_pdf_button = QPushButton("🗑️ Xóa PDF đã chọn")
-        self.remove_pdf_button.clicked.connect(self.remove_selected_pdf)
 
         # Nút hiển thị CSV
         self.view_csv_button = QPushButton("📄 Xem dữ liệu CSV")
@@ -48,11 +57,6 @@ class DataManager(QWidget):
         # Cho phép bảng chiếm toàn bộ không gian layout
         self.table_widget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
-        layout.addWidget(QLabel("📂 Chọn file PDF:"))
-        layout.addWidget(self.pdf_combo)
-        layout.addWidget(self.remove_pdf_button)
-        layout.addSpacing(10)
-
         layout.addWidget(QLabel("📄 Chọn file CSV:"))
         layout.addWidget(self.csv_combo)
         layout.addWidget(self.view_csv_button)
@@ -62,44 +66,22 @@ class DataManager(QWidget):
         # Phát âm khi click vào từ trong bảng
         self.table_widget.cellClicked.connect(self.on_cell_clicked)
 
-    def load_pdf_files(self):
-        pdf_files = [f for f in os.listdir(self.pdf_dir) if f.endswith('.pdf')]
-        self.pdf_combo.clear()
-        self.pdf_combo.addItems(pdf_files)
-
     def load_csv_files(self):
+        if not os.path.exists(self.csv_dir):
+            QMessageBox.critical(self, "Lỗi", "Không tìm thấy thư mục chứa file CSV.")
+            return
+
+        # Tải danh sách các file CSV trong thư mục 'datas'
         csv_files = [f for f in os.listdir(self.csv_dir) if f.endswith('.csv')]
         self.csv_combo.clear()
         self.csv_combo.addItems(csv_files)
-
 
     def on_cell_clicked(self, row, column):
         """Khi người dùng ấn vào ô trong bảng, phát âm từ trong cột 'Word'"""
         if column == 0:  # Cột "Word"
             word = self.table_widget.item(row, column).text()
             print(word)
-            self.text_to_speech.speak(word, use_online=False)  # Gọi phương thức phát âm
-
-    def remove_selected_pdf(self):
-        selected_pdf = self.pdf_combo.currentText()
-        if not selected_pdf:
-            QMessageBox.warning(self, "Lỗi", "Không có file PDF nào được chọn.")
-            return
-
-        reply = QMessageBox.question(
-            self, "Xác nhận xoá",
-            f"Bạn có chắc muốn xoá file '{selected_pdf}' không?",
-            QMessageBox.Yes | QMessageBox.No
-        )
-
-        if reply == QMessageBox.Yes:
-            file_path = os.path.abspath(os.path.join(self.pdf_dir, selected_pdf))
-            try:
-                os.remove(file_path)
-                QMessageBox.information(self, "Thành công", f"Đã xoá {selected_pdf}")
-                self.load_pdf_files()  # Cập nhật lại danh sách
-            except Exception as e:
-                QMessageBox.critical(self, "Lỗi", f"Lỗi khi xoá file: {e}")
+            self.text_to_speech.speak(word)  # Gọi phương thức phát âm
 
     def load_selected_csv(self):
         selected_csv = self.csv_combo.currentText()
@@ -107,6 +89,7 @@ class DataManager(QWidget):
             QMessageBox.warning(self, "Lỗi", "Không có file CSV nào được chọn.")
             return
 
+        # Lấy đường dẫn đầy đủ đến file CSV
         csv_path = os.path.abspath(os.path.join(self.csv_dir, selected_csv))
         try:
             df = pd.read_csv(csv_path)

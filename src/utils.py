@@ -1,48 +1,40 @@
-from PyQt6.QtCore import QTimer
-import pyttsx3
 from gtts import gTTS
 import os
-import playsound
+import pygame
+import time
 
 class TextToSpeechApp:
     def __init__(self):
-        # Khởi tạo pyttsx3 (offline)
-        self.engine = pyttsx3.init()
-        self.engine.setProperty('rate', 150)  # Tốc độ nói (mặc định 200)
-        self.engine.setProperty('volume', 1)  # Âm lượng (0.0 to 1.0)
-        self.is_speaking = False  # Cờ kiểm tra trạng thái phát âm
-        self.timer = QTimer()  # Tạo một QTimer
-        self.timer.setSingleShot(True)  # Đảm bảo chỉ chạy 1 lần
-        self.timer.timeout.connect(self.resume_speaking)  # Khi hết thời gian, gọi hàm resume_speaking
-
-    def speak_offline(self, text):
-        """Sử dụng pyttsx3 để phát âm (offline)"""
-        if not self.is_speaking:
-            self.is_speaking = True
-            self.engine.say(text)
-            self.engine.runAndWait()  # Đợi cho đến khi phát âm hoàn tất
-            self.timer.start(1)  # Đợi 2 giây trước khi cho phép phát âm tiếp
+        pygame.mixer.init()
 
     def speak_online(self, text, lang='en'):
-        """Sử dụng gTTS để phát âm (online)"""
-        if not self.is_speaking:
-            self.is_speaking = True
-            tts = gTTS(text=text, lang=lang, slow=False)
-            temp_audio_file = 'temp_audio.mp3'
-            tts.save(temp_audio_file)
-            playsound.playsound(temp_audio_file)
-            os.remove(temp_audio_file)
-            self.timer.start(2000)  # Đợi 2 giây trước khi cho phép phát âm tiếp
+        tts = gTTS(text=text, lang=lang, slow=False)
+        temp_audio_file = 'temp_audio.mp3'
+        tts.save(temp_audio_file)
 
-    def speak(self, text, use_online=True):
-        """Chọn phương thức phát âm: online (gTTS) hoặc offline (pyttsx3)"""
-        if use_online:
-            print("Sử dụng phát âm online...")
-            self.speak_online(text)
-        else:
-            print("Sử dụng phát âm offline...")
-            self.speak_offline(text)
+        pygame.mixer.music.load(temp_audio_file)
+        pygame.mixer.music.play()
 
-    def resume_speaking(self):
-        """Hàm này sẽ được gọi sau khi chờ đợi 2 giây"""
-        self.is_speaking = False  # Đánh dấu là không còn phát âm nữa
+        # Chờ phát xong
+        while pygame.mixer.music.get_busy():
+            pygame.time.Clock().tick(10)
+
+        # Dừng hẳn, đợi một lúc trước khi xóa
+        pygame.mixer.music.stop()
+        pygame.mixer.quit()  # <- QUAN TRỌNG: đóng mixer để giải phóng file
+        time.sleep(0.3)
+
+        # Thử xóa nhiều lần nếu file vẫn bị lock
+        for _ in range(5):
+            try:
+                os.remove(temp_audio_file)
+                break
+            except PermissionError:
+                time.sleep(0.2)
+
+        # Khởi động lại mixer cho lần sau
+        pygame.mixer.init()
+
+    def speak(self, text):
+        print("Sử dụng phát âm online...")
+        self.speak_online(text)
