@@ -1,4 +1,4 @@
-from PyQt5.QtCore import QTimer
+from PyQt6.QtCore import QTimer
 import pyttsx3
 from gtts import gTTS
 import os

@@ -1,12 +1,13 @@
 import os
 import csv
-from PyQt5.QtWidgets import (
+from PyQt6.QtWidgets import (
     QWidget, QLabel, QVBoxLayout, QPushButton, QComboBox, QTableWidget,
     QTableWidgetItem, QHBoxLayout, QMessageBox
 )
-from PyQt5.QtCore import Qt
+from PyQt6.QtCore import Qt
 import pandas as pd
 from src.utils import TextToSpeechApp
+from PyQt6.QtWidgets import QHeaderView,QSizePolicy
 
 class DataManager(QWidget):
     def __init__(self):
@@ -37,6 +38,15 @@ class DataManager(QWidget):
         self.table_widget = QTableWidget()
         self.table_widget.setColumnCount(4)
         self.table_widget.setHorizontalHeaderLabels(["Word", "Meaning", "Meaning VN", "Example"])
+
+        # Dãn đều các cột theo chiều ngang
+        self.table_widget.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+
+        # Hàng tự dãn theo nội dung
+        self.table_widget.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
+
+        # Cho phép bảng chiếm toàn bộ không gian layout
+        self.table_widget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
         layout.addWidget(QLabel("📂 Chọn file PDF:"))
         layout.addWidget(self.pdf_combo)
@@ -83,7 +93,7 @@ class DataManager(QWidget):
         )
 
         if reply == QMessageBox.Yes:
-            file_path = os.path.join(self.pdf_dir, selected_pdf)
+            file_path = os.path.abspath(os.path.join(self.pdf_dir, selected_pdf))
             try:
                 os.remove(file_path)
                 QMessageBox.information(self, "Thành công", f"Đã xoá {selected_pdf}")
@@ -97,7 +107,7 @@ class DataManager(QWidget):
             QMessageBox.warning(self, "Lỗi", "Không có file CSV nào được chọn.")
             return
 
-        csv_path = os.path.join(self.csv_dir, selected_csv)
+        csv_path = os.path.abspath(os.path.join(self.csv_dir, selected_csv))
         try:
             df = pd.read_csv(csv_path)
             self.table_widget.setRowCount(0)
@@ -109,8 +119,8 @@ class DataManager(QWidget):
                 def make_item(text):
                     item = QTableWidgetItem(str(text))
                     item.setToolTip(str(text))
-                    item.setTextAlignment(Qt.AlignTop)
-                    item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
+                    item.setTextAlignment(Qt.AlignmentFlag.AlignTop)
+                    item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
                     return item
 
                 self.table_widget.setItem(row_position, 0, make_item(row['word']))
@@ -119,6 +129,7 @@ class DataManager(QWidget):
                 self.table_widget.setItem(row_position, 3, make_item(row['examples']))
 
             self.table_widget.resizeRowsToContents()
+            self.table_widget.resizeColumnsToContents()
 
         except Exception as e:
             QMessageBox.critical(self, "Lỗi", f"Không thể đọc file CSV: {e}")

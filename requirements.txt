@@ -9,3 +9,4 @@ gTTS
 Pillow
 pyttsx3
 playsound
+PyQt6
